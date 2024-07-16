@@ -1,0 +1,747 @@
+openapi: 3.0.3
+info:
+  title: BMSTU Navigator
+  
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://127.0.0.1:5000
+ 
+  
+tags:
+  - name: base nodes
+    description: Операции, связанные с базовыми точками
+  - name: buildings  
+    description: Операции, связанные со строениями
+  - name: rooms 
+    description: Операции, связанные со помещениями
+  - name: floors 
+    description: Операции, связанные этажами
+    
+paths:
+  /base_nodes/add_base_point:
+    post:
+      tags:
+        - base nodes
+      summary: Добавляет базовую точку в базу данных 
+      description: Добавляет базовую точку в базу данных 
+      requestBody:
+        content:
+          application/json:
+             schema:
+               $ref: '#/components/schemas/base_point'
+        required: true
+      responses:
+        '200':
+          description: Record was successfully added
+          
+  /base_nodes/get_base_point:
+    get:
+      tags:
+        - base nodes
+      summary: Возвращает информацию о всех базовых точках на этаже или все базовые точки
+      description: Возвращает информацию о всех базовых точках на этаже. В случае, если парамерт id не определён, возвращает все базовые точки со всех этажей
+      parameters:
+        - name: id
+          in: query
+          description: Этаж, базовые точки с которого нужно вернуть
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+              array:
+                schema:
+                  type: array
+                  items:  {$ref: '#/components/schemas/base_point'}
+                  example: [
+    {
+        "id": 1,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 4,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 5,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 3,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 9,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": {},
+        "floor_id": 1
+    },
+    {
+        "id": 2,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": {
+            "1": {
+                "x": 1,
+                "y": 1
+            },
+            "2": {
+                "x": 2,
+                "y": 2
+            },
+            "3": {
+                "x": 3,
+                "y": 3
+            },
+            "4": {
+                "x": 4,
+                "y": 4
+            }
+        },
+        "floor_id": 1
+    },
+    {
+        "id": 12,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 13,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": {},
+        "floor_id": 1
+    },
+    {
+        "id": 14,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": "{'1': 1}",
+        "floor_id": 1
+    },
+    {
+        "id": 15,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": "{'1': {'x': 1, 'y': 1}, '2': {'x': 2, 'y': 2}, '3': {'x': 3, 'y': 3}, '4': {'x': 4, 'y': 4}}",
+        "floor_id": 1
+    },
+    {
+        "id": 16,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": "{}",
+        "floor_id": 1
+    },
+    {
+        "id": 17,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": "{'1': {'x': 241.8, 'y': 77.4}, '2': {'x': 252.2, 'y': 77.5}, '3': {'x': 261.5, 'y': 25.5}, '4': {'x': 232.8, 'y': 25.5}}",
+        "floor_id": 1
+    },
+    {
+        "id": 18,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 19,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 20,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 21,
+        "uuid": null,
+        "coordinates": null,
+        "floor_id": 1
+    },
+    {
+        "id": 22,
+        "uuid": "123e4567-e89b-12d3-a456-426655440000",
+        "coordinates": "{'1': {'x': 241.8, 'y': 77.4}, '2': {'x': 252.2, 'y': 77.5}, '3': {'x': 261.5, 'y': 25.5}, '4': {'x': 232.8, 'y': 25.5}}",
+        "floor_id": 1
+    }
+]
+        '404':
+          description: Records not found
+        
+  /base_nodes/{base_node_id}>:
+    get:
+      tags:
+        - base nodes
+      summary: Возвращает информацию о базовой точке и её связях по её ID
+      description: Возвращает информацию о базовой точке и её связях по её ID
+      parameters:
+        - name: base_node_id
+          in: path
+          description: ID базовой точки, о которой нужно вернуть данные
+          required: true
+          schema:
+            type: integer
+            example: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_point_with_connections'
+        '404':
+          description: Records not found 
+   
+  /base_nodes/{base_node_id}/connection:
+     post:
+      tags:
+        - base nodes
+      summary: Создаёт связь между базовыми точками  
+      description: Этот запрос создает в таблице base_connection строĸу, в ĸоторой описывается связь базовой точĸи с id=1 с точĸой переданной в теле запроса (допустим с базовой точĸой с id = 3). То есть после успешного совершения таĸого запроса у точĸи с id = 1 появится связь с точĸой 3 с весом 5, а ĸроме того, еще должна появиться связь 3 точĸи с 1 (в обратную сторону с таĸим же весом)
+      parameters:
+        - name: base_node_id
+          in: path
+          description: ID базовой точки, для которой нужно создать связь
+          required: true
+          schema:
+            type: integer
+            example: 4
+      requestBody:
+        content:
+          application/json:
+             schema:
+               $ref: '#/components/schemas/connection_creation_json'
+        required: true
+      responses:
+        '200':
+          description: Record was successfully added
+          
+  /get_all_baseconnections:
+    get:
+      tags:
+        - base nodes
+      summary: возвращает все существующие связи между базовыми точками
+      description: возвращает все существующие связи между базовыми точками
+      responses:
+        '200':
+          description: OK
+          content:
+            array:
+              example:
+                [
+    [
+        5,
+        4
+    ],
+    [
+        4,
+        5
+    ],
+    [
+        4,
+        3
+    ],
+    [
+        3,
+        4
+    ],
+    [
+        3,
+        2
+    ],
+    [
+        2,
+        3
+    ],
+    [
+        2,
+        1
+    ],
+    [
+        1,
+        2
+    ],
+    [
+        5,
+        3
+    ],
+    [
+        3,
+        5
+    ],
+    [
+        2,
+        3
+    ],
+    [
+        3,
+        2
+    ],
+    [
+        15,
+        14
+    ],
+    [
+        14,
+        15
+    ],
+    [
+        15,
+        14
+    ],
+    [
+        14,
+        15
+    ],
+    [
+        2,
+        22
+    ],
+    [
+        22,
+        2
+    ]
+]
+        '404':
+          description: Records not found 
+          
+  /get_room_basepoint:
+    get:
+      tags:
+        - base nodes
+        - rooms
+      summary: возвращает ID базовой точки, с которой соединено данное помещение
+      description: возвращает ID базовой точки, с которой соединено данное помещение
+      parameters:
+        - name: id
+          in: query
+          description: ID помещения, для которого нужно найти связанную базовую точку
+          required: true
+          schema:
+            type: integer
+            example: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            integer:
+              example: 2
+        '404':
+          description: Records not found       
+  
+  /buildings/add_building:
+    post:
+      tags:
+        - buildings
+      summary: Добавляет строение в базу данных 
+      description: Добавляет строение в базу данных 
+      requestBody:
+        content:
+          application/json:
+             schema:
+               $ref: '#/components/schemas/building'
+        required: true
+      responses:
+        '200':
+          description: Record was successfully added
+          
+  /buildings/get_all_buildings:
+    get:
+      tags:
+        - buildings
+      summary: Возвращает все строения  
+      description: Возвращает все строения   
+      responses:
+        '200':
+          description: OK
+          content:
+              array:
+                schema:
+                  type: array
+                  items:  {$ref: '#/components/schemas/building'}
+                  example: [
+    {
+        "id": 1,
+        "uuid": null,
+        "displayed_name": "ULK",
+        "private_name": null,
+        "describtion": null
+    },
+    {
+        "id": 2,
+        "uuid": null,
+        "displayed_name": "GZ",
+        "private_name": null,
+        "describtion": null
+    },
+    {
+        "id": 3,
+        "uuid": null,
+        "displayed_name": "Energo",
+        "private_name": null,
+        "describtion": null
+    }
+]       
+
+  /floors/{building_id}:
+    get:
+      tags:
+        - floors
+      summary: Возвращает все этажи строения с данным ID  
+      description: Возвращает все этажи строения с данным ID  
+      parameters:
+        - name: building_id
+          in: path
+          description: ID здания, для которого нужно вернуть этажи
+          required: true
+          schema:
+            type: integer
+            example: 4
+      responses:
+        '200':
+          description: OK
+          content:
+              array:
+                schema:
+                  type: array
+                  items:  {$ref: '#/components/schemas/floor'}
+                  example:  [
+    {
+        "id": 1,
+        "uuid": null,
+        "displayed_name": "ULK1stFloor",
+        "private_name": null,
+        "describtion": null
+    },
+    {
+        "id": 2,
+        "uuid": null,
+        "displayed_name": "ULK2ndFloor",
+        "private_name": null,
+        "describtion": null
+    },
+    {
+        "id": 4,
+        "uuid": null,
+        "displayed_name": "ULK3rdFloor",
+        "private_name": null,
+        "describtion": null
+    }
+]   
+
+  /get_room_coords:
+    get:
+      tags:
+        - rooms
+      summary: возвращает координаты svg polygon для помещения с заданным id 
+      description: Возвращает все этажи строения с данным ID  
+      parameters:
+        - name: id
+          in: query
+          description: ID помещения, для которого нужно вернуть координаты
+          required: true
+          schema:
+            type: integer
+            example: 4
+      responses:
+        '200':
+          description: OK
+          content:
+              application/json:
+                example: {
+    "1": {
+        "x": 29.2,
+        "y": 14.3
+    },
+    "2": {
+        "x": 103.2,
+        "y": 14
+    },
+    "3": {
+        "x": 103.2,
+        "y": 14.9
+    },
+    "4": {
+        "x": 104.3,
+        "y": 14.9
+    },
+    "5": {
+        "x": 104.4,
+        "y": 44.4
+    },
+    "6": {
+        "x": 24.2,
+        "y": 44.4
+    }
+}
+        '404':
+          description: Records not found                
+  
+  /get_path:
+    get:
+      tags:
+        - rooms
+      summary: возвращает путь между помещениями и его длину  
+      description: возвращает путь между помещениями с id "from" и "to" в виде последовательности id базовых точек, по которым нужно пройти, чтобы добраться до пункта назначения (путь состоит именно из id базовых точек, id "from" и "to" в массив из id базовых точек не включаются, потому что "from" и "to" не базовые точки); также возвращает длину этого пути
+      parameters:
+        - name: from
+          in: query
+          description: ID базовой точки начала пути
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: to
+          in: query
+          description: ID базовой точки конца пути
+          required: true
+          schema:
+            type: integer
+            example: 2    
+      responses:
+        '200':
+          description: OK
+          content:
+              application/json:
+                schema: {$ref: '#/components/schemas/path'}
+                example:   {
+    "from": "1",
+    "to": "11",
+    "path": [
+        1,
+        2,
+        3
+    ],
+    "lenth": 10
+}             
+                
+  
+  
+components:
+  schemas:
+    base_point:
+      required:
+        - floor_id
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        coordinates:
+          description: координаты svg polygon, соответствующего данной базовой точке 
+          type: object
+          example: "{'1': {'x': 241.8, 'y': 77.4}, '2': {'x': 252.2, 'y': 77.5}, '3': {'x': 261.5, 'y': 25.5}, '4': {'x': 232.8, 'y': 25.5}}"
+        floor_id:
+          type: integer
+          description: id этажа, на котором расположена базовая точка
+          example: 1 
+          
+    base_point_with_connections:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        coordinates:
+          type: object
+          description: координаты svg polygon, соответствующего данной базовой точке 
+          example: "{'1': {'x': 241.8, 'y': 77.4}, '2': {'x': 252.2, 'y': 77.5}, '3': {'x': 261.5, 'y': 25.5}, '4': {'x': 232.8, 'y': 25.5}}"
+        floor_id:
+          type: integer
+          description: id этажа, на котором расположена базовая точка
+          example: 1  
+        connections:
+          type: array
+          description: массив связей, которыми обладает данная базовая точка
+          items:  {$ref: '#/components/schemas/connection_with_id' }
+          example: [
+        {
+            "base_connection_id": 2,
+            "weight": 5,
+            "connection_type": null,
+            "base_point_1_id": 4,
+            "base_point_2_id": 5,
+            "floor_id": 1
+        },
+        {
+            "base_connection_id": 3,
+            "weight": 5,
+            "connection_type": null,
+            "base_point_1_id": 4,
+            "base_point_2_id": 3,
+            "floor_id": 1
+        }
+    ]
+          
+    connection_with_id:
+      required:
+        - floor_base_connection_id
+        - weight
+        - connection_type
+        - base_point_1_id
+        - base_point_2_id
+        - floor_id
+      type: object
+      properties:
+        base_connection_id:
+          type: integer
+          description: id связи
+          example: 3
+        weight: 
+          type: integer
+          description: весовой коэффициет ребра в математического модели взвешенного графа
+          example: 5
+        connection_type: 
+          type: string
+          description: тип связли, пользовательский тип данных, значение выбирается из списка доступных значений
+          example: null,
+        base_point_1_id: 
+          description: id 1-ой точки (вершины) инцидентной ребру, соответствующему текущей связи
+          type: integer
+          example: 4
+        base_point_2_id: 
+          type: integer
+          description: id 2-ой точки (вершины) инцидентной ребру, соответствующему текущей связи
+          example: 3
+        floor_id: 
+          type: integer
+          description: id этажа, на котором расположена базовая точка
+          example: 1
+    
+    connection_creation_json:
+      type: object
+      properties:
+        node_id: 
+          description: id базовой точки, с которой нужно связать точку, чей id передаётся в виде path параметра
+          type: integer
+          example: 1
+        weight: 
+          description: весовой коэффициет ребра в математического модели взвешенного графа
+          type: integer
+          example: 2
+          
+    building:
+      required:
+        - displayed_name
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        displayed_name:
+          description: отображаемое имя 
+          type: string
+          example: "УЛК"
+        private_name:
+          description: скрытое имя
+          type: string
+          example: "Учебно-лабораторный корпус"  
+        description:
+          description: описание
+          type: string
+          example: "Учебно-лабораторный корпус МГТУ им. Баумана" 
+          
+    floor:
+      required:
+        - displayed_name
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        displayed_name:
+          description: отображаемое имя 
+          type: string
+          example: "1-ый этаж УЛК"
+        private_name:
+          description: скрытое имя
+          type: string
+          example: "1-ый этаж учебно-лабораторного корпуса"  
+        description:
+          description: описание
+          type: string
+          example: "1-ый этаж учебно-лабораторного корпуса МГТУ им. Баумана"
+        building_id:
+          description: ID здания, в котором расположен этаж
+          type: integer
+          example: 1        
+          
+          
+    room:
+      required:
+        - displayed_name
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        displayed_name:
+          description: отображаемое имя 
+          type: string
+          example: "515ю"
+        private_name:
+          description: скрытое имя
+          type: string
+          example: "Аудитория 515ю"  
+        description:
+          description: описание
+          type: string
+          example: "Аудитория 515ю"   
+          
+    path:
+      type: object
+      properties:
+        from: 
+          description: id помещения, из которого необходимо построить маршрут
+          type: string
+          example: "1"
+    
+        to: 
+          description: id помещения, до которого необходимо построить маршрут
+          type: string
+          example: "2"
+        path: 
+          type: array
+          description: путь
+          items:  {type: integer}
+          example: [1,
+        2,
+        3]
+          
+        lenth: 
+          description: длина пути
+          type: integer
+          example: 15
+
+            
+           
+  
+              
+      
+ 

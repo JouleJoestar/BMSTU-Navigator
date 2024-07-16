@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.0-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - ${BACKEND_PORT_POSTGRES}:${BACKEND_PORT_POSTGRES} # [порт компьютера]:[порт контейнера] 5432:5432
+    command:
+      - "postgres"
+      - "-c"
+      - "port=${BACKEND_PORT_POSTGRES}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+
+  pgadmin:
+    image: dpage/pgadmin4:7.8
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@pgadmin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+      - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT_ENV}
+    ports:
+      - ${PG_ADMIN_PORT}:${PGADMIN_LISTEN_PORT_ENV} # [порт компьютера]:[порт контейнера]
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  flask:
+    # Путь до Dockerfile
+    build: ./ # Dockerfile лежит в той же папке, что и docker-compose.yml
+    #command: python -m flask --app flask_api\app.py run --host=0.0.0.0
+    # Имя для создаваемого контейнера
+    environment:
+      # для отладки (при запуске в релиз убрать!)
+      - FLASK_ENV=development
+      ## Позволяет отслеживать процесс работы приложения в командной строке
+      - PYTHONUNBUFFERED=True
+      ##
+    # Перезапускаем сервис в случае падения
+    restart: always
+    # Прокладывам путь для файлов. Все файлы, которые хранятся у вас в
+    # директории ./backend, появятся в директории контейнера /backend
+    volumes:
+      - flask:/var/lib/flask
+    # Открываем порт в контейнер
+    # Порт, который будет смотреть наружу : порт который используется внутри контейнера
+    ports:
+      - ${FLASK_EXTERNAL_PORT}:5000 # [порт компьютера]:[порт контейнера]
+
+volumes:
+  postgres:
+  pgadmin:
+  flask:

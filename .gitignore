@@ -1,0 +1,5 @@
+flask_api/.env
+.env
+app1.py
+venv
+.idea
