@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 ##################
 
+from .resources.Admin import GetAdminDataByBuildingUuid, GetAdminDataByBuildingUuidSplitedByFloors
 from .resources.BaseNodes import AddBasePoint, GetBaseNodeByUuid, GetAllBasePointsConnections, GetAllBasePointsAtTheFloor, AddBaseNodeConnection
 from .resources.Buildings import GetAllBuildings, AddBuilding
 from .resources.Floors import GetAllFloorsByBuildingUuid, GetAllRoomsAndBasepointsByFloorUuid, GetAllRoomsAndBasepointsByBuildingUuidAndFloorNumber
@@ -95,6 +96,8 @@ api.add_resource(GetBaseNodeByUuid, '/base_nodes/<uuid:basenode_uuid>', resource
 # То есть после успешного совершения таĸого запроса у точĸи с uuid = 1 появится связь с точĸой 3 с весом 5,
 # а ĸроме того, еще должна появиться связь 3 точĸи с 1 (в обратную сторону с таĸим же весом)
 api.add_resource(AddBaseNodeConnection, '/base_nodes/<uuid:basenode_uuid>/connection', resource_class_kwargs=kwargs_cursor_and_parser)
+
+api.add_resource(GetAdminDataByBuildingUuidSplitedByFloors, '/admin_data/<uuid:building_uuid>', resource_class_kwargs=kwargs_cursor )
 
 
 

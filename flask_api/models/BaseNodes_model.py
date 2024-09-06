@@ -33,3 +33,18 @@ def basenode_with_connections_tuple_to_dict(basenode_tuple, connections_tuple):
         "connections": connections
         }
     return result
+
+def basenode_tuple_to_dict__Admin(tuple):
+    array = []
+    for i in range(len(tuple)):
+        base_point = {
+        "uuid": tuple[i][0],
+        "displayed_name": tuple[i][1],
+        "private_name": tuple[i][2],
+        "floor_number": tuple[i][3],
+        "floor_uuid": tuple[i][4],
+        "basenode_type": tuple[i][5],
+        "coordinates": tuple[i][6],
+        }
+        array.append(base_point)
+    return array
